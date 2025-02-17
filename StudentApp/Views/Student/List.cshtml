@@ -6,7 +6,7 @@
 
 <h2>All Students</h2>
 
-<a href="#" class="btn btn-primary mb-3">Add New Student</a> <!-- Link to add new student page (to be implemented later) -->
+<a href="@Url.Action("Add", "Student")" class="btn btn-primary mb-3">Add New Student</a>
 
 <table class="table">
     <thead>
@@ -29,8 +29,8 @@
                 <td>@student.GPA</td>
                 <td>@student.GPAScale</td>
                 <td>
-                    <a href="@Url.Action("Edit", "StudentController1", new { id = student.Id })" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="@Url.Action("Delete", "StudentController1", new { id = student.Id })" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="@Url.Action("Edit", "StudentController", new { id = student.Id })" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="@Url.Action("Delete", "StudentController", new { id = student.Id })" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         }
