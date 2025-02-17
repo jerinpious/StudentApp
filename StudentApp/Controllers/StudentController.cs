@@ -36,5 +36,21 @@ namespace StudentApp.Controllers
 
             return View(studentToAdd);
         }
+
+        [HttpGet]
+
+        public IActionResult Edit(int id)
+        {
+            return View(studentService.GetStudentById(id));
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id,Student studentToUpdate) {
+
+            studentService.UpdateStudent(id, studentToUpdate);
+
+            return RedirectToAction("List");
+        }
+
     }
 }

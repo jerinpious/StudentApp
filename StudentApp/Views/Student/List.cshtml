@@ -29,7 +29,7 @@
                 <td>@student.GPA</td>
                 <td>@student.GPAScale</td>
                 <td>
-                    <a href="@Url.Action("Edit", "StudentController", new { id = student.Id })" class="btn btn-warning btn-sm">Edit</a>
+                    <a asp-controller="Student" asp-action="Edit" asp-route-id="@student.Id" class="btn btn-warning btn-sm">Edit</a>
                     <a href="@Url.Action("Delete", "StudentController", new { id = student.Id })" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>

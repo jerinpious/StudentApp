@@ -23,9 +23,29 @@ namespace StudentApp.Services
             Console.WriteLine($"Added new student: {studentToAdd.FirstName} {studentToAdd.LastName}, Id: {studentToAdd.Id}");
         }
 
+        public Student GetStudentById(int id)
+        {
+            Student? s = students.Find(s => s.Id == id);
+            if(s == null)
+            {
+                return new Student();
+            }
+            return s;
+        }
+
         public List<Student> GetStudents()
         {
             return students;
+        }
+
+        public void UpdateStudent(int studentId,Student studentToUpdate)
+        {
+            Student studentInMemory = GetStudentById(studentId);
+            studentInMemory.LastName = studentToUpdate.LastName;
+            studentInMemory.FirstName = studentToUpdate.FirstName;
+            studentInMemory.DateOfBirth = studentToUpdate.DateOfBirth;
+            studentInMemory.GPA = studentToUpdate.GPA;
+            studentInMemory.Hobby = studentToUpdate.Hobby;
         }
     }
 }
