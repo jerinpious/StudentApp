@@ -6,17 +6,16 @@ namespace StudentApp.Controllers
 {
     public class StudentController : Controller
     {
-        IStudentService studentService = new StudentServiceInMemory();
+        private readonly IStudentService _studentService;
+
+        public StudentController(IStudentService studentService)
+        {
+            _studentService = studentService;
+        }
 
         public IActionResult List()
         {
-            var students = studentService.GetStudents(); // Fetch updated list
-            Console.WriteLine("Students in List: ");
-            foreach (var student in students)
-            {
-                Console.WriteLine($"{student.FirstName} {student.LastName}");
-            }
-            return View(students);
+            return View(_studentService.GetStudents());
         }
 
         [HttpGet]
@@ -30,27 +29,29 @@ namespace StudentApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                studentService.AddStudent(studentToAdd);
-                return RedirectToAction("List", studentService.GetStudents());
+                _studentService.AddStudent(studentToAdd);
+                return RedirectToAction("List");
             }
 
             return View(studentToAdd);
         }
 
         [HttpGet]
-
         public IActionResult Edit(int id)
         {
-            return View(studentService.GetStudentById(id));
+            var student = _studentService.GetStudentById(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
         }
 
         [HttpPost]
-        public IActionResult Edit(int id,Student studentToUpdate) {
-
-            studentService.UpdateStudent(id, studentToUpdate);
-
+        public IActionResult Edit(int id, Student studentToUpdate)
+        {
+            _studentService.UpdateStudent(id, studentToUpdate);
             return RedirectToAction("List");
         }
-
     }
 }
