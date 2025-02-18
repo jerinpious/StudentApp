@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using StudentApp.Models;
 using StudentApp.Services;
 
@@ -7,20 +8,24 @@ namespace StudentApp.Controllers
     public class StudentController : Controller
     {
         private readonly IStudentService _studentService;
+        private readonly StudentDbContext _context;
 
-        public StudentController(IStudentService studentService)
+        public StudentController(IStudentService studentService, StudentDbContext context)
         {
             _studentService = studentService;
+            _context = context;
         }
 
         public IActionResult List()
         {
-            return View(_studentService.GetStudents());
+            var students = _studentService.GetStudents();
+            return View(students);
         }
 
         [HttpGet]
         public IActionResult Add()
         {
+            ViewBag.Programs = _context.Programs.ToList();
             return View(new Student());
         }
 
@@ -44,6 +49,7 @@ namespace StudentApp.Controllers
             {
                 return NotFound();
             }
+            ViewBag.Programs = _context.Programs.ToList();
             return View(student);
         }
 
@@ -53,5 +59,32 @@ namespace StudentApp.Controllers
             _studentService.UpdateStudent(id, studentToUpdate);
             return RedirectToAction("List");
         }
+
+        public IActionResult Delete(int id)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.Id == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
+        }
+
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var student = _context.Students.FirstOrDefault(s => s.Id == id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+
+            _context.Students.Remove(student);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(List)); 
+        }
+
     }
 }

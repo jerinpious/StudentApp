@@ -1,7 +1,7 @@
-﻿using StudentApp.Data;
+﻿
+using Microsoft.EntityFrameworkCore; 
 using StudentApp.Models;
-using System.Collections.Generic;
-using System.Linq;
+
 
 namespace StudentApp.Services
 {
@@ -22,12 +22,12 @@ namespace StudentApp.Services
 
         public Student? GetStudentById(int id)
         {
-            return _context.Students.Find(id);
+            return _context.Students.Include(s => s.Program).FirstOrDefault(s => s.Id == id); 
         }
 
         public List<Student> GetStudents()
         {
-            return _context.Students.ToList();
+            return _context.Students.Include(s => s.Program).ToList(); // Include Program data
         }
 
         public void UpdateStudent(int studentId, Student studentToEdit)
@@ -40,6 +40,7 @@ namespace StudentApp.Services
                 studentInDb.DateOfBirth = studentToEdit.DateOfBirth;
                 studentInDb.GPA = studentToEdit.GPA;
                 studentInDb.Hobby = studentToEdit.Hobby;
+                studentInDb.ProgramCode = studentToEdit.ProgramCode; 
                 _context.SaveChanges();
             }
         }

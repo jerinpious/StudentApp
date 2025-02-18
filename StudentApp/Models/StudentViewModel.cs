@@ -11,6 +11,10 @@ namespace StudentApp.Models
         public double GPA { get; set; }
         public string Hobby { get; set; }
 
+        // Foreign Key to Program
+        public string ProgramCode { get; set; } // FK to Program
+        public Program Program { get; set; } 
+
         // Calculated Age based on DateOfBirth
         public int Age
         {
@@ -34,3 +38,4 @@ namespace StudentApp.Models
         }
     }
 }
+
